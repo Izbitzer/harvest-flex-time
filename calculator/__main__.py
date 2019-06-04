@@ -31,9 +31,9 @@ class HourCalculator:
         print("Actual hours: %s. Expected hours: %s" % (self.hours, self.expected_hours))
         diff = round(self.hours - self.expected_hours, 2)
         if diff < 0:
-            print("\t\033[93m%s hours below expected" % diff)
+            print("\t\033[93m%s hours below expected\033[0m" % diff)
         else:
-            print("\t\033[92m%s hours above expected" % diff)
+            print("\t\033[92m%s hours above expected\033[0m" % diff)
 
     def _print_progress_dot(self, finished=False):
         sys.stdout.write(".")
