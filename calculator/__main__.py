@@ -46,7 +46,9 @@ class HourCalculator:
             if is_weekend(day):
                 continue
             if self.holidays.get(day):
-                if is_tuesday(day) and day > self.start_date or is_thursday(day) and day < self.end_date:
+                if is_tuesday(day) and day > self.start_date and not self.holidays.get(prev_day(day)):
+                    self.expected_hours -= 8
+                if is_thursday(day) and day < self.end_date and not self.holidays.get(next_day(day)):
                     self.expected_hours -= 8
                 continue
             self.expected_hours += 8
@@ -75,6 +77,12 @@ def date_range(start, end):
     while current <= end:
         yield current
         current = current + timedelta(days=1)
+
+def next_day(day):
+    return day + timedelta(days=1)
+
+def prev_day(day):
+    return day - timedelta(days=1)
 
 def is_weekend(d):
     return d.isoweekday() > 5
