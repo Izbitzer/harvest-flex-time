@@ -54,9 +54,11 @@ class HourCalculator:
             self.expected_hours += 8
 
     def _process(self):
-        url = "%stime_entries?per_page=100&from=%s&to=%s&page=1" % (self.base_url, self.start_date, self.end_date)
-        if self.user_id:
-            url += "&user_id=%s" % self.user_id
+        if not self.user_id:
+            user_info = requests.get("%susers/me" % self.base_url, headers=self._headers()).json()
+            self.user_id = user_info["id"]
+        url = "%stime_entries?per_page=100&from=%s&to=%s&user_id=%s&page=1" % (self.base_url, self.start_date, self.end_date, self.user_id)
+
         while url is not None:
             response = requests.get(url, headers=self._headers()).json()
             self.hours += sum([entry["hours"] for entry in response.get("time_entries", [])])
